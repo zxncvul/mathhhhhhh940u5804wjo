@@ -26,6 +26,9 @@ export function createSpinner(labelText, inputId, initialValue) {
   input.id = inputId;
   input.value = String(initialValue);
   input.min = (inputId === 'numa-chain') ? '2' : '1';
+  input.readOnly = true;
+  input.setAttribute('inputmode', 'none');
+  input.setAttribute('aria-readonly', 'true');
 
   const btnContainer = document.createElement('div');
   btnContainer.style.display = 'flex';
@@ -51,7 +54,8 @@ export function createSpinner(labelText, inputId, initialValue) {
     }
 
     input.value = String(val);
-    input.dispatchEvent(new Event('input'));
+    input.dispatchEvent(new Event('input', { bubbles: true }));
+    input.dispatchEvent(new Event('change', { bubbles: true }));
   };
 
   const btnDown = document.createElement('button');
@@ -76,7 +80,8 @@ export function createSpinner(labelText, inputId, initialValue) {
     }
 
     input.value = String(val);
-    input.dispatchEvent(new Event('input'));
+    input.dispatchEvent(new Event('input', { bubbles: true }));
+    input.dispatchEvent(new Event('change', { bubbles: true }));
   };
 
   
