@@ -48,5 +48,6 @@ export function createNumericKeypad() {
 
     input.focus();
     input.dispatchEvent(new Event('input', { bubbles: true }));
+    input.dispatchEvent(new Event('change', { bubbles: true }));
   });
 }

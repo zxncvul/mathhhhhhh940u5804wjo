@@ -370,15 +370,9 @@ export function renderExercises(items, modes) {
     }
     input.maxLength = maxLength;
     input.className = 'answer-input';
-    input.setAttribute('readonly', 'true');
-    input.addEventListener('touchstart', e => {
-      e.preventDefault();
-      input.removeAttribute('readonly');
-      input.focus();
-    });
-    input.addEventListener('blur', () => {
-      input.setAttribute('readonly', 'true');
-    });
+    input.readOnly = true;
+    input.setAttribute('inputmode', 'none');
+    input.setAttribute('aria-readonly', 'true');
     questionRow.appendChild(input);
     attachValidation({
       inputEl: input,
