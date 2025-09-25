@@ -23,7 +23,7 @@ body {
   overflow-x: hidden;
   display: flex;              /* mantenemos flex si quieres que el hijo se estire */
   align-items: flex-start;    /* ⬅ ahora lo alinea arriba */
-  justify-content: flex-start;/* ⬅ y a la izquierda */
+  justify-content: center;/* ⬅ y a la izquierda */
   
 }
 
@@ -48,7 +48,7 @@ body {
   background-repeat: no-repeat;
     width: 100%;
   height: 100%;
-  max-width: 120vw;
+  max-width: 100vw;
   box-sizing: border-box;
   
 }
@@ -928,4 +928,5 @@ button.numa-btn.active {
 
 
 /* Vista responsive a pantalla completa con margen uniforme */
+
 
