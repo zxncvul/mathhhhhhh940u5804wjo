@@ -8,36 +8,21 @@ export function createNumericKeypad() {
   const keypad = document.createElement('div');
   keypad.id = 'numeric-keypad';
 
-  const layout = [
-    ['7', '8', '9'],
-    ['4', '5', '6'],
-    ['1', '2', '3'],
-    ['0', 'C', '←']
-  ];
+  const keys = ['7', '8', '9', '4', '5', '6', '1', '2', '3', '0', 'C', '←'];
 
-  layout.forEach(rowKeys => {
-    const row = document.createElement('div');
-    row.className = 'numa-keypad-row';
-    rowKeys.forEach(key => {
-      const btn = document.createElement('button');
-      btn.className = 'numa-key';
-      btn.dataset.key = key;
-      btn.textContent = key;
-      row.appendChild(btn);
-    });
-    keypad.appendChild(row);
-  });
-
-  const extraRow = document.createElement('div');
-  extraRow.className = 'numa-keypad-row';
-  [':', '/', '%', '.'].forEach(key => {
+  keys.forEach(key => {
     const btn = document.createElement('button');
+    btn.type = 'button';
     btn.className = 'numa-key';
     btn.dataset.key = key;
     btn.textContent = key;
-    extraRow.appendChild(btn);
+    if (key === 'C') {
+      btn.setAttribute('aria-label', 'Limpiar');
+    } else if (key === '←') {
+      btn.setAttribute('aria-label', 'Borrar último dígito');
+    }
+    keypad.appendChild(btn);
   });
-  keypad.appendChild(extraRow);
 
   term.appendChild(keypad);
 

@@ -33,8 +33,9 @@ function updateHud() {
   if (!failDisplay || !pendingDisplay) return;
   const remainingMain = Math.max(sequence.length - idx, 0);
   const pending = remainingMain + failedExercises.length;
+  const answered = Math.max(0, totalCount - pending);
   failDisplay.textContent = pad4(failCount);
-  pendingDisplay.textContent = `${pad4(pending)}/${pad4(totalCount)}`;
+  pendingDisplay.textContent = `${pad4(answered)}/${pad4(totalCount)}`;
 }
 
 // Utilidades matemáticas
@@ -233,8 +234,8 @@ export function renderExercises(items, modes) {
   function restartSession(startingSequence) {
     idx = 0;
     failedExercises = [];
-    exContainer.innerHTML = '';
-    answeredList.innerHTML = '';
+    if (exContainer) exContainer.innerHTML = '';
+    if (answeredList) answeredList.innerHTML = '';
     let newSeq = startingSequence.slice();
     let attempt = 0;
     do {
@@ -259,8 +260,8 @@ export function renderExercises(items, modes) {
         return showNext();
       }
 
-    answeredList.innerHTML = '';
-    exContainer.innerHTML = '';
+    if (answeredList) answeredList.innerHTML = '';
+    if (exContainer) exContainer.innerHTML = '';
 
     // ⏱ parar cronómetro al terminar la tanda
     if (window.stopChrono) {
@@ -280,20 +281,20 @@ export function renderExercises(items, modes) {
       }, 50);
       restartSession(originalSequence);
     };
-    exContainer.appendChild(repeatBtn);
+    if (exContainer) exContainer.appendChild(repeatBtn);
     return;
   }
 
   const currentItem = sequence[idx++];
   const isObject = isObjectItem(currentItem);
 
-  exContainer.innerHTML = '';
+  if (exContainer) exContainer.innerHTML = '';
   const questionRow = document.createElement('div');
   questionRow.className = 'exercise-row';
   const pregunta = document.createElement('div');
   pregunta.className = 'question';
   questionRow.appendChild(pregunta);
-  exContainer.appendChild(questionRow);
+  if (exContainer) exContainer.appendChild(questionRow);
 
   let correctStr = '';
   let recordValue = currentItem;
@@ -494,26 +495,28 @@ export function renderExercises(items, modes) {
             if (firstTry) {
               failedExercises.push(recordValue);
               failCount += 1;
-              const item = document.createElement('div');
-              item.className = 'answered-item incorrect';
-              item.textContent = historyFormatter(userValue);
-              answeredList.insertBefore(item, answeredList.firstChild);
-              adjustAnsweredListFadeOut();
-              updateHud();
+              if (answeredList) {
+                const item = document.createElement('div');
+                item.className = 'answered-item incorrect';
+                item.textContent = historyFormatter(userValue);
+                answeredList.insertBefore(item, answeredList.firstChild);
+                adjustAnsweredListFadeOut();
+              }
             }
 
-            inputEl.value = '';
-            inputEl.focus();
-            firstTry = false;
+            updateHud();
+            showNext();
             return;
           }
 
           if (firstTry) {
-            const item = document.createElement('div');
-            item.className = 'answered-item correct';
-            item.textContent = historyFormatter(userValue);
-            answeredList.insertBefore(item, answeredList.firstChild);
-            adjustAnsweredListFadeOut();
+            if (answeredList) {
+              const item = document.createElement('div');
+              item.className = 'answered-item correct';
+              item.textContent = historyFormatter(userValue);
+              answeredList.insertBefore(item, answeredList.firstChild);
+              adjustAnsweredListFadeOut();
+            }
           }
 
           showNext();
@@ -525,6 +528,7 @@ export function renderExercises(items, modes) {
   }
 
   function adjustAnsweredListFadeOut() {
+    if (!answeredList) return;
     const lis = Array.from(answeredList.children);
     while (lis.length > 10) {
       lis.pop();
