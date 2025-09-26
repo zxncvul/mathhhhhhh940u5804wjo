@@ -84,7 +84,10 @@ export function createSpinner(labelText, inputId, initialValue) {
     input.dispatchEvent(new Event('change', { bubbles: true }));
   };
 
-  
+  btnContainer.appendChild(btnUp);
+  btnContainer.appendChild(btnDown);
+
+
   spinner.appendChild(input);
   spinner.appendChild(btnContainer);
   lbl.appendChild(spinner);

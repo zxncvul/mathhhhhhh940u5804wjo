@@ -260,29 +260,33 @@ export function renderExercises(items, modes) {
         return showNext();
       }
 
-    if (answeredList) answeredList.innerHTML = '';
-    if (exContainer) exContainer.innerHTML = '';
+      if (answeredList) answeredList.innerHTML = '';
+      if (exContainer) exContainer.innerHTML = '';
 
-    // ⏱ parar cronómetro al terminar la tanda
-    if (window.stopChrono) {
-       window.stopChrono(false);
-    }
+      // ⏱ parar cronómetro al terminar la tanda
+      if (window.stopChrono) {
+        window.stopChrono(false);
+      }
+      if (window.stopCountdown) {
+        window.stopCountdown();
+      }
 
-    const repeatBtn = document.createElement('button');
-    repeatBtn.textContent = 'Repetir';
-    repeatBtn.className = 'numa-btn';
-    repeatBtn.style.marginTop = '1em';
-    repeatBtn.onclick = () => {
-      if (window.stopChrono) window.stopChrono(true); // reset limpio
-      setTimeout(() => {
-        if (window.chronoBtn && window.chronoBtn.classList.contains('active')) {
-          window.startChrono(); // reinicia al repetir
-        }
-      }, 50);
-      restartSession(originalSequence);
-    };
-    if (exContainer) exContainer.appendChild(repeatBtn);
-    return;
+      const repeatBtn = document.createElement('button');
+      repeatBtn.textContent = 'Repetir';
+      repeatBtn.className = 'numa-btn';
+      repeatBtn.style.marginTop = '1em';
+      repeatBtn.onclick = () => {
+        if (window.resetCountdown) window.resetCountdown();
+        if (window.stopChrono) window.stopChrono(true); // reset limpio
+        setTimeout(() => {
+          if (window.chronoBtn && window.chronoBtn.classList.contains('active')) {
+            window.startChrono(); // reinicia al repetir
+          }
+        }, 50);
+        restartSession(originalSequence);
+      };
+      if (exContainer) exContainer.appendChild(repeatBtn);
+      return;
   }
 
   const currentItem = sequence[idx++];

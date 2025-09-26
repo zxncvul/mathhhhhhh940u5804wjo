@@ -13,6 +13,8 @@ let countdownIndex = 0;        // arranca en 0''
 
 let chronoBtn, countdownWidget, resetBtn;
 let countdownInput, countdownLeft, countdownRight;
+let chronoDisplayEl = null;
+let countdownDisplayEl = null;
 
 const timeOptions = [
   { label: "0s ", value: 0 },
@@ -126,6 +128,7 @@ export function initTimerUI(container, onReset) {
   window.startChrono = startChrono;
   window.stopChrono = stopChrono;
   window.resetCountdown = resetCountdown;
+  window.stopCountdown = stopCountdown;
   window.getCountdownActive = () => countdownActive;
   window.chronoBtn = chronoBtn;
 }
@@ -149,6 +152,18 @@ function resetCountdown() {
   countdownRemaining = option.value * 1000;
   countdownActive = option.value > 0;
   countdownInput.style.color = option.value > 0 ? "green" : "red";
+}
+
+function stopCountdown() {
+  countdownActive = false;
+  countdownRemaining = 0;
+  if (countdownInput) {
+    countdownInput.style.color = "red";
+  }
+  if (countdownDisplayEl) {
+    countdownDisplayEl.textContent = "00:00:00.00";
+    countdownDisplayEl.style.color = "#ff0000";
+  }
 }
 
 function startChrono() {
@@ -176,10 +191,12 @@ export function renderTimerInSession(topBar) {
   const chronoDisplay = document.createElement('span');
   chronoDisplay.className = 'timer-display chrono';
   topBar.insertBefore(chronoDisplay, topBar.firstChild);
+  chronoDisplayEl = chronoDisplay;
 
   const countdownDisplay = document.createElement('span');
   countdownDisplay.className = 'timer-display countdown';
   topBar.insertBefore(countdownDisplay, chronoDisplay.nextSibling);
+  countdownDisplayEl = countdownDisplay;
 
   setInterval(() => {
     updateChronoDisplay(chronoDisplay);
@@ -191,6 +208,9 @@ export function renderTimerInSession(topBar) {
         countdownActive = false;
         countdownDisplay.style.color = '#ff0000';
         countdownDisplay.textContent = "00:00:00.00";
+        if (countdownInput) {
+          countdownInput.style.color = "red";
+        }
 
         if (window.stopChrono) window.stopChrono(false); // parar y congelar crono
 
